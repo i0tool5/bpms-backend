@@ -33,7 +33,9 @@ class ProjectApiView(viewsets.ModelViewSet):
     ]
 
     def get_queryset(self):
-        return proj_models.Project.objects.filter(Q(public=True) | Q(created_by=self.request.user))
+        return proj_models.Project.objects.filter(
+            Q(public=True) | Q(created_by=self.request.user)
+        )
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -53,7 +55,7 @@ class ProjectApiView(viewsets.ModelViewSet):
 
 class MultipleProjectsDeleteApiView(views.APIView):
     queryset = proj_models.Project.objects.all()
-    permission_classes = [IsAuthenticated,]
+    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
     
     def delete(self, request, *args, **kwargs):
         objs = self.queryset.filter(pk__in=request.data["projects"])
