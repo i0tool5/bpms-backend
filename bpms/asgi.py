@@ -11,6 +11,6 @@ import os
 
 from django.core.asgi import get_asgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'iccs_crm_v2.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'bpms.settings')
 
 application = get_asgi_application()
