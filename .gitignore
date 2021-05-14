@@ -1,7 +1,6 @@
 db.sqlite3
 ROADMAP.txt
 .env
-*/migrations/*.py
-!*/migrations/__init__.py
-*/migrations/__pycache__
-*/__pycache__
+**/migrations/*.py
+!**/migrations/__init__.py
+**/__pycache__
