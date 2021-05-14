@@ -1,6 +1,7 @@
 import django.utils.timezone as django_timezone
 
-from django.contrib.auth.password_validation import validate_password
+from django.contrib.auth import get_user_model
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -8,14 +9,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ReadOnlyModelViewSet
 from rest_framework.authtoken.views import ObtainAuthToken
 
-from users.forms import CustomUserCreationForm
-from users.models import CustomUser
 from users.serializers import (
-                    UserSerializer,
-                    ProfileSerializer
-                    )
+    UserSerializer,
+    ProfileSerializer
+)
 
 from bpms import rest_permissions
+
+UserModel = get_user_model()
 
 class ChangePasswordApi(APIView):
     permission_classes = [
@@ -23,12 +24,12 @@ class ChangePasswordApi(APIView):
         rest_permissions.IsOwnerOrReadOnly
     ]
     def put(self, request, *args, **kwargs):
-        user = requset.user
+        user = request.user
         return Response()
 
 
 class UserListApiView(ReadOnlyModelViewSet):
-    queryset = CustomUser.objects.all()
+    queryset = UserModel.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated,]
     
@@ -50,7 +51,7 @@ class RetrieveAuthToken(ObtainAuthToken):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        token, created = Token.objects.get_or_create(user=user)
+        token, _ = Token.objects.get_or_create(user=user)
         user.last_login = django_timezone.now()
         user.save(update_fields=['last_login'])
         return Response({'token': token.key})
