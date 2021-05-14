@@ -1,10 +1,6 @@
 import datetime
 
 from django.db.models import Q
-from django.views import generic
-from django.shortcuts import render
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.response import Response
@@ -88,7 +84,6 @@ class TaskApiView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         cont_type = request.data.pop("content_type", None)
         identifier = request.data.get("object_id", None)
-        # assign = request.data.pop('assign')
         cont_object = None
         content_type = None
         if cont_type == "projects":
@@ -108,18 +103,5 @@ class TaskApiView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.validated_data.update(dat)
         obj = serializer.save(created_by=request.user)
-        # obj.assign.set(assign)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-
-
-class IndexView(generic.View, LoginRequiredMixin):
-    today = datetime.date.today()
-    plus_month = today + datetime.timedelta(weeks=4)
-    initial_vals = {'begin_date': today, 'end_date': plus_month}
-
-    def get(self, request, *args, **kwargs):
-        return render(request, "index.html", context={
-            "login_form": AuthenticationForm
-        })
-

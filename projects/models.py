@@ -43,7 +43,12 @@ class Status(models.Model):
 
 
 class Deal(DealProjAbstractModel):
-    client = models.CharField(max_length=128, default='', null=True, blank=True) 
+    client = models.CharField(
+        max_length=128,
+        default='',
+        null=True,
+        blank=True
+    )
     status = models.ForeignKey(Status, on_delete=models.SET_NULL, null=True)
     created_by = models.ForeignKey(
         get_user_model(),
@@ -75,21 +80,36 @@ class Project(DealProjAbstractModel):
 
 class TaskModel(models.Model):
     uid = models.UUIDField(editable=False, primary_key=True, unique=True, default=uuid.uuid4)
-    statuses = (('1', 'Открыта'), ('2', 'В работе'), ('3', 'Закрыта'))
-    prio = (('1', 'Низкий'), ('2', 'Ниже среднего'), ('3', 'Средний'), ('4', 'Выше среднего'), ('5', 'Высокий'), ('6', 'Реального времени'))
+    statuses = (
+        ('1', 'Открыта'),
+        ('2', 'В работе'),
+        ('3', 'Закрыта')
+    )
+    prio = (
+        ('1', 'Низкий'),
+        ('2', 'Ниже среднего'),
+        ('3', 'Средний'),
+        ('4', 'Выше среднего'),
+        ('5', 'Высокий'),
+        ('6', 'Реального времени')
+    )
 
     name = models.CharField(max_length=80)
     assign = models.ManyToManyField(
         get_user_model(),
         related_name='tasks',
-        )
+    )
     begin_date = models.DateField()
     end_date = models.DateField()
     status = models.CharField(max_length=7, choices=statuses, default=1)
     priority = models.CharField(max_length=10, choices=prio, default=3)
     description = models.TextField(max_length=512, null=True, blank=True)
 
-    created_by = models.ForeignKey(get_user_model(), related_name='tasks_created', on_delete=models.SET_NULL, null=True)
+    created_by = models.ForeignKey(
+        get_user_model(),
+        related_name='tasks_created',
+        on_delete=models.SET_NULL, null=True
+    )
     creation_datetime = models.DateTimeField(auto_now_add=True)
     update_datetime = models.DateTimeField(auto_now=True)
 
