@@ -3,7 +3,7 @@ from rest_framework.serializers import (ModelSerializer,
                                         RelatedField)
 
 import projects.models as projects_models
-from users.serializers import UserSerializer
+
 
 class UsersField(RelatedField):
     def get_queryset(self):

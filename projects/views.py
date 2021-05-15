@@ -8,7 +8,7 @@ from rest_framework import status, views, viewsets
 from rest_framework.permissions import IsAuthenticated
 
 import projects.models as proj_models
-from bpms.rest_permissions import (
+from miscell.permissions import (
     IsOwnerOrReadOnly,
     IsOwnerOrAssigned
 )
@@ -17,7 +17,6 @@ from projects.serializers import (
     DealSerializer, 
     TaskSerializer,
 )
-
 
 # Create your views here.
 
@@ -51,7 +50,7 @@ class ProjectApiView(viewsets.ModelViewSet):
 
 class MultipleProjectsDeleteApiView(views.APIView):
     queryset = proj_models.Project.objects.all()
-    permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
+    permission_classes = [IsOwnerOrReadOnly]
     
     def delete(self, request, *args, **kwargs):
         objs = self.queryset.filter(pk__in=request.data["projects"])

@@ -14,14 +14,14 @@ from users.serializers import (
     ProfileSerializer
 )
 
-from bpms import rest_permissions
+from miscell import permissions
 
 UserModel = get_user_model()
 
 class ChangePasswordApi(APIView):
     permission_classes = [
         IsAuthenticated,
-        rest_permissions.IsOwnerOrReadOnly
+        permissions.IsOwnerOrReadOnly
     ]
     def put(self, request, *args, **kwargs):
         user = request.user
