@@ -1,6 +1,7 @@
 from rest_framework.serializers import (ModelSerializer, 
                                         StringRelatedField,
-                                        RelatedField)
+                                        RelatedField,
+                                        ValidationError)
 
 import projects.models as projects_models
 
@@ -31,8 +32,19 @@ class GenericForeignField(RelatedField):
         pass
 
 
-class TaskSerializer(ModelSerializer):
+class DateValidation(ModelSerializer):
     created_by = StringRelatedField()
+
+    def validate(self, data):
+        if data['begin_date'] > data['end_date']:
+            raise ValidationError('begin date can\'t be more than end date')
+        elif data['end_date'] < data['begin_date']:
+            raise ValidationError('end date can\'t be less than begin date')
+
+        return data
+
+
+class TaskSerializer(DateValidation):
     assign = UsersField()
     content_type = GenericForeignField(required=False)
     class Meta:
@@ -40,17 +52,13 @@ class TaskSerializer(ModelSerializer):
         fields = '__all__'
         
 
-class ProjectSerializer(ModelSerializer):
-    created_by = StringRelatedField()
-
+class ProjectSerializer(DateValidation):
     class Meta:
         model = projects_models.Project
         fields = "__all__"
 
 
 class DealSerializer(ModelSerializer):
-    created_by = StringRelatedField()
-    
     class Meta:
         model = projects_models.Deal
         fields = '__all__'

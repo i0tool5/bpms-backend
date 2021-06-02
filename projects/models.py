@@ -72,7 +72,7 @@ class Project(DealProjAbstractModel):
         on_delete=models.SET_NULL,
         related_name='projects',
         null=True,
-        )
+    )
     
     class Meta:
         ordering = ["-creation_datetime"]
