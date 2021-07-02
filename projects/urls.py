@@ -1,5 +1,4 @@
 from django.urls import re_path
-from django.urls.conf import include
 
 from rest_framework.routers import DefaultRouter
 
@@ -17,4 +16,6 @@ urlpatterns = [
         r'^api/projects/delete-multiple/?$',
         views.MultipleProjectsDeleteApiView.as_view()
     ),
+    re_path(r'^api/statuses/?$', views.StatusApiView.as_view(),
+        name='statuses')
 ]

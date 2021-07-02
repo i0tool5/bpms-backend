@@ -28,4 +28,4 @@ class CustomUser(AbstractUser):
         return self.tasks.count()
 
     def __str__(self):
-        return self.first_name + ' ' + self.last_name
+        return f'{self.first_name} {self.last_name}'

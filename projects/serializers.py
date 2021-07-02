@@ -32,14 +32,28 @@ class GenericForeignField(RelatedField):
         pass
 
 
+class StatusForeignField(RelatedField):
+    '''
+    Status foreign key for deals
+    '''
+    def get_queryset(self):
+        super().get_queryset()
+        
+    def to_representation(self, value):
+        return str(value)
+
+    def to_internal_value(self, data):
+        return projects_models.Status.objects.get(uid=data)
+
+
 class DateValidation(ModelSerializer):
     created_by = StringRelatedField()
 
     def validate(self, data):
         if data['begin_date'] > data['end_date']:
-            raise ValidationError('begin date can\'t be more than end date')
+            raise ValidationError("begin date can't be more than end date")
         elif data['end_date'] < data['begin_date']:
-            raise ValidationError('end date can\'t be less than begin date')
+            raise ValidationError("end date can't be less than begin date")
 
         return data
 
@@ -55,10 +69,17 @@ class TaskSerializer(DateValidation):
 class ProjectSerializer(DateValidation):
     class Meta:
         model = projects_models.Project
-        fields = "__all__"
+        fields = '__all__'
 
 
 class DealSerializer(ModelSerializer):
+    status = StatusForeignField()
     class Meta:
         model = projects_models.Deal
+        fields = '__all__'
+
+
+class StatusSerializer(ModelSerializer):
+    class Meta:
+        model = projects_models.Status
         fields = '__all__'

@@ -1,0 +1,28 @@
+- model: projects.status
+  pk: 00fd0ac8-5adb-46c5-a7d6-0c205fd97a45
+  fields:
+    name: Квалификация
+- model: projects.status
+  pk: 4f64d291-cb76-4a64-a3fa-19377a338a17
+  fields:
+    name: Выслан договор
+- model: projects.status
+  pk: 674ba5cf-5f60-42c1-b2a1-ad4fafd0287d
+  fields:
+    name: Аванс получен
+- model: projects.status
+  pk: a05cede7-57eb-4a7f-9ed8-d7709450ce69
+  fields:
+    name: Выставлен счёт
+- model: projects.status
+  pk: a161d3a7-c5ac-498e-b662-0cf6832f2e45
+  fields:
+    name: Отправлено КП
+- model: projects.status
+  pk: b16a0f9c-b885-41af-8d2f-8c0880b2664f
+  fields:
+    name: Исполнение
+- model: projects.status
+  pk: d19c7265-5ce6-4bc4-95fe-a6e5daa0ae27
+  fields:
+    name: Договор подписан

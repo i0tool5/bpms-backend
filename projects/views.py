@@ -1,10 +1,9 @@
-import datetime
-
 from django.db.models import Q
 from django.contrib.contenttypes.models import ContentType
 
 from rest_framework.response import Response
 from rest_framework import status, views, viewsets
+from rest_framework.generics import ListCreateAPIView
 from rest_framework.permissions import IsAuthenticated
 
 import projects.models as proj_models
@@ -16,6 +15,7 @@ from projects.serializers import (
     ProjectSerializer,
     DealSerializer, 
     TaskSerializer,
+    StatusSerializer,
 )
 
 # Create your views here.
@@ -101,6 +101,14 @@ class TaskApiView(viewsets.ModelViewSet):
 
         serializer.is_valid(raise_exception=True)
         serializer.validated_data.update(dat)
-        obj = serializer.save(created_by=request.user)
+        serializer.save(created_by=request.user)
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+    
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
+
+class StatusApiView(ListCreateAPIView):
+    queryset = proj_models.Status.objects.all()
+    serializer_class = StatusSerializer

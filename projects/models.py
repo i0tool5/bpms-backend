@@ -36,7 +36,10 @@ class DealProjAbstractModel(MainAbstractModel):
 class Status(models.Model):
     '''This class represents statuses for deals'''
     uid = models.UUIDField(editable=False, primary_key=True, unique=True, default=uuid.uuid4)
-    name = models.CharField(max_length=10, unique=True)
+    name = models.CharField(max_length=32, unique=True)
+
+    class Meta:
+        ordering = ['name']
 
     def __str__(self):
         return self.name
