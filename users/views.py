@@ -2,6 +2,8 @@ import django.utils.timezone as django_timezone
 
 from django.contrib.auth import get_user_model
 
+from rest_framework import status
+
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
@@ -11,7 +13,8 @@ from rest_framework.authtoken.views import ObtainAuthToken
 
 from users.serializers import (
     UserSerializer,
-    ProfileSerializer
+    ProfileSerializer,
+    PasswordSerializer
 )
 
 from miscell import permissions
@@ -23,9 +26,19 @@ class ChangePasswordApi(APIView):
         IsAuthenticated,
         permissions.IsOwnerOrReadOnly
     ]
+
+    serializer_class = PasswordSerializer
     def put(self, request, *args, **kwargs):
+        pwds = self.serializer_class(data=request.data)
+        pwds.is_valid(raise_exception=True)
+
         user = request.user
-        return Response()
+        if not user.check_password(pwds.validated_data["old_password"]):
+            return Response(data={"error": "incorrect password"}, status=status.HTTP_400_BAD_REQUEST)
+        
+        user.set_password(pwds.validated_data["new_password"])
+        user.save()
+        return Response(status=status.HTTP_200_OK)
 
 
 class UserListApiView(ReadOnlyModelViewSet):
