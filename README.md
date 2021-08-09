@@ -5,11 +5,11 @@ It is a backend service for BPMS.
 ## Work in progress 😄
 
 At this moment the codebase contain some problems, few of them are:
-* It should not contain HTML/JS/CSS, but it does
-* Token authorization (it's better to be an JWT)
-* Some security flaws, such as: user A can delete user B's object
-* Not completely DRY
-* There is no tests (it is really bad!)
+- [ ] It should not contain HTML/JS/CSS, but it does
+- [ ] Token authorization (it's better to be an JWT)
+- [ ] Some security flaws, such as: user A can delete user B's object
+- [ ] Not completely DRY
+- [ ] There is no tests (it is really bad!)
 
 # Rationale
 
