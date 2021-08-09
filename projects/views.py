@@ -18,9 +18,8 @@ from projects.serializers import (
     StatusSerializer,
 )
 
-# Create your views here.
 
-class ProjectApiView(viewsets.ModelViewSet):
+class ProjectsApiView(viewsets.ModelViewSet):
     serializer_class = ProjectSerializer
     permission_classes = [
         IsAuthenticated,
@@ -48,7 +47,7 @@ class ProjectApiView(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class MultipleProjectsDeleteApiView(views.APIView):
+class MultipleProjectsDestroyApiView(views.APIView):
     queryset = proj_models.Project.objects.all()
     permission_classes = [IsOwnerOrReadOnly]
     
@@ -58,7 +57,7 @@ class MultipleProjectsDeleteApiView(views.APIView):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class DealApiView(viewsets.ModelViewSet):
+class DealsApiView(viewsets.ModelViewSet):
     queryset = proj_models.Deal.objects.all()
     serializer_class = DealSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
@@ -71,7 +70,7 @@ class DealApiView(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
-class TaskApiView(viewsets.ModelViewSet):
+class TasksApiView(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
     permission_classes = [IsAuthenticated, IsOwnerOrAssigned]
 
@@ -109,6 +108,6 @@ class TaskApiView(viewsets.ModelViewSet):
         return super().destroy(request, *args, **kwargs)
 
 
-class StatusApiView(ListCreateAPIView):
+class StatusesApiView(ListCreateAPIView):
     queryset = proj_models.Status.objects.all()
     serializer_class = StatusSerializer

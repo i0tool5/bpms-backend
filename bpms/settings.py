@@ -62,6 +62,7 @@ ROOT_URLCONF = 'bpms.urls'
 
 WSGI_APPLICATION = 'bpms.wsgi.application'
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
