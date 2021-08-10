@@ -46,6 +46,7 @@ class Status(models.Model):
 
 
 class Deal(DealProjAbstractModel):
+    file = models.FileField(null=True, blank=True)
     client = models.CharField(
         max_length=128,
         default='',
@@ -67,6 +68,7 @@ class Deal(DealProjAbstractModel):
 
 
 class Project(DealProjAbstractModel):
+    file = models.FileField(null=True, blank=True)
     begin_date = models.DateField(null=True)
     end_date = models.DateField(null=True)
 
