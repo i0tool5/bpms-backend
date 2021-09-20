@@ -7,11 +7,14 @@ from django.contrib.contenttypes.fields import GenericForeignKey
 
 # Create your models here.
 
+
 class MainAbstractModel(models.Model):
-    uid = models.UUIDField(editable=False, primary_key=True, unique=True, default=uuid.uuid4)
+    uid = models.UUIDField(editable=False, primary_key=True,
+                           unique=True, default=uuid.uuid4)
     name = models.CharField(max_length=128)
     creation_datetime = models.DateTimeField(auto_now_add=True)
     update_datetime = models.DateTimeField(auto_now=True)
+
     class Meta:
         abstract = True
         ordering = ['-creation_datetime']
@@ -21,21 +24,22 @@ class DealProjAbstractModel(MainAbstractModel):
     payment = models.IntegerField(default=100_000, null=True)
     description = models.TextField(max_length=1000, blank=True, null=True)
     public = models.BooleanField(default=False, blank=False)
-    
+
     @classmethod
     def get_payment_sum(cls):
         return cls.objects.aggregate(models.Sum('payment'))
-    
+
     def __str__(self):
         return self.name
-    
+
     class Meta(MainAbstractModel.Meta):
         abstract = True
 
 
 class Status(models.Model):
     '''This class represents statuses for deals'''
-    uid = models.UUIDField(editable=False, primary_key=True, unique=True, default=uuid.uuid4)
+    uid = models.UUIDField(editable=False, primary_key=True,
+                           unique=True, default=uuid.uuid4)
     name = models.CharField(max_length=32, unique=True)
 
     class Meta:
@@ -78,13 +82,14 @@ class Project(DealProjAbstractModel):
         related_name='projects',
         null=True,
     )
-    
+
     class Meta:
         ordering = ["-creation_datetime"]
 
 
 class TaskModel(models.Model):
-    uid = models.UUIDField(editable=False, primary_key=True, unique=True, default=uuid.uuid4)
+    uid = models.UUIDField(editable=False, primary_key=True,
+                           unique=True, default=uuid.uuid4)
     statuses = (
         ('1', 'Открыта'),
         ('2', 'В работе'),
@@ -120,13 +125,12 @@ class TaskModel(models.Model):
 
     # generic relation to projects/deals
     content_type = models.ForeignKey(ContentType,
-                                        on_delete=models.CASCADE,
-                                    )
+                                     on_delete=models.CASCADE, )
     object_id = models.UUIDField()
     content_object = GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
         ordering = ['end_date', 'name']

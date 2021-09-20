@@ -1,7 +1,5 @@
-from rest_framework.serializers import (ModelSerializer, 
-                                        StringRelatedField,
-                                        RelatedField,
-                                        ValidationError)
+from rest_framework.serializers import (ModelSerializer, RelatedField,
+                                        StringRelatedField, ValidationError)
 
 import projects.models as projects_models
 
@@ -12,7 +10,7 @@ class UsersField(RelatedField):
 
     def to_representation(self, value):
         return [usr.username for usr in value.all()]
-    
+
     def to_internal_value(self, data):
         return data
 
@@ -24,7 +22,7 @@ class GenericForeignField(RelatedField):
     '''
     def get_queryset(self):
         super().get_queryset()
-        
+
     def to_representation(self, value):
         return str(value.model)
 
@@ -38,7 +36,7 @@ class StatusForeignField(RelatedField):
     '''
     def get_queryset(self):
         super().get_queryset()
-        
+
     def to_representation(self, value):
         return str(value)
 
@@ -61,10 +59,11 @@ class DateValidation(ModelSerializer):
 class TaskSerializer(DateValidation):
     assign = UsersField()
     content_type = GenericForeignField(required=False)
+
     class Meta:
         model = projects_models.TaskModel
         fields = '__all__'
-        
+
 
 class ProjectSerializer(DateValidation):
     class Meta:
@@ -74,6 +73,7 @@ class ProjectSerializer(DateValidation):
 
 class DealSerializer(ModelSerializer):
     status = StatusForeignField()
+
     class Meta:
         model = projects_models.Deal
         fields = '__all__'

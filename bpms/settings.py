@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 
 import os
 
-from django.conf.global_settings import AUTH_USER_MODEL, LOGIN_REDIRECT_URL, LOGOUT_REDIRECT_URL, MEDIA_URL
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -57,6 +55,8 @@ MIDDLEWARE = [
     # Additional middleware
     'corsheaders.middleware.CorsMiddleware',
 ]
+
+# Additional settings
 
 ROOT_URLCONF = 'bpms.urls'
 

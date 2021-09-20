@@ -25,6 +25,7 @@ from miscell import permissions
 
 UserModel = get_user_model()
 
+
 class ChangeUserApi(GenericViewSet):
     permission_classes = [
         IsAuthenticated,
@@ -40,27 +41,30 @@ class ChangeUserApi(GenericViewSet):
         user = request.user
         if not user.check_password(pwds.validated_data['old_password']):
             return Response(data={'error': 'incorrect password'},
-                status=status.HTTP_400_BAD_REQUEST)
-        
+                            status=status.HTTP_400_BAD_REQUEST)
+
         user.set_password(pwds.validated_data['new_password'])
         user.save()
         return Response(status=status.HTTP_200_OK)
-    
+
     @action(methods=['POST'], detail=False)
     def change_login(self, request):
         serializer = self.get_serializer_class()
         usr_name = serializer(data=request.data)
-        if not usr_name.is_valid(raise_exception=False):
+        if not usr_name.is_valid():
             return Response(data=usr_name.errors,
-                status=status.HTTP_400_BAD_REQUEST)
-        
-        r_user = request.user.username
-        r_user.username = serializer.validated_data['new_name']
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        r_user = request.user
+        if usr_name.validated_data['new_name'] == r_user.username:
+            return Response(data={'errors': ['No change for username']},
+                            status=status.HTTP_409_CONFLICT)
+        r_user.username = usr_name.validated_data['new_name']
         r_user.save()
 
-        return Response(data={'warning': 'not implemented', 'nn': request.data},
-            status=status.HTTP_501_NOT_IMPLEMENTED)
-    
+        return Response(data={'username': r_user.username},
+                        status=status.HTTP_200_OK)
+
     def get_serializer_class(self):
         if self.action == 'change_password':
             return PasswordSerializer
@@ -71,15 +75,15 @@ class ChangeUserApi(GenericViewSet):
 class UserListApiView(ReadOnlyModelViewSet):
     queryset = UserModel.objects.all()
     serializer_class = UserSerializer
-    permission_classes = [IsAuthenticated,]
-    
+    permission_classes = [IsAuthenticated, ]
+
     class Meta:
         fields = ['pk', 'username', 'first_name', 'last_name']
 
 
 class ProfileView(APIView):
-    permission_classes = [IsAuthenticated,]
-    
+    permission_classes = [IsAuthenticated, ]
+
     def get(self, request, *args, **kwargs):
         user = request.user
         serialized = ProfileSerializer(user)
