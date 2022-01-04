@@ -13,7 +13,7 @@ from miscell.permissions import (
 )
 from projects.serializers import (
     ProjectSerializer,
-    DealSerializer, 
+    DealSerializer,
     TaskSerializer,
     StatusSerializer,
 )
@@ -44,13 +44,14 @@ class ProjectsApiView(viewsets.ModelViewSet):
                 serial.validated_data['created_by'] = request.user
                 serial.save(content_object=proj)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class MultipleProjectsDestroyApiView(views.APIView):
     queryset = proj_models.Project.objects.all()
     permission_classes = [IsOwnerOrReadOnly]
-    
+
     def delete(self, request, *args, **kwargs):
         objs = self.queryset.filter(pk__in=request.data["projects"])
         objs.delete()
@@ -67,7 +68,8 @@ class DealsApiView(viewsets.ModelViewSet):
         serializer.is_valid(raise_exception=True)
         serializer.save(created_by=request.user)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
 
 class TasksApiView(viewsets.ModelViewSet):
@@ -102,8 +104,9 @@ class TasksApiView(viewsets.ModelViewSet):
         serializer.validated_data.update(dat)
         serializer.save(created_by=request.user)
         headers = self.get_success_headers(serializer.data)
-        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
-    
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
     def destroy(self, request, *args, **kwargs):
         return super().destroy(request, *args, **kwargs)
 

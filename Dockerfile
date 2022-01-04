@@ -9,4 +9,4 @@ COPY --chown=developer:developer . /usr/src/app
 USER developer
 RUN ["python", "-m", "pip" , "install", "-r", "requirements.txt"]
 
-CMD ["/bin/bash"]
+ENTRYPOINT ["bash", "entrypoint.sh"]

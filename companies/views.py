@@ -6,7 +6,6 @@ from companies.serializers import (
     ContactSerializer
 )
 
-# Create your views here.
 
 class CompanyApiView(ModelViewSet):
     queryset = Company.objects.all()

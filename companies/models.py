@@ -7,7 +7,11 @@ from companies.validators import phone_num_validator
 
 
 class AbstractClient(models.Model):
-    uid = models.UUIDField(editable=False, primary_key=True, unique=True, default=uuid.uuid4)
+    uid = models.UUIDField(
+        editable=False,
+        primary_key=True,
+        unique=True,
+        default=uuid.uuid4)
     name = models.fields.CharField(
         max_length=127,
         null=False,
@@ -30,6 +34,7 @@ class AbstractClient(models.Model):
         null=True,
         blank=True
     )
+
     class Meta:
         ordering = ['name']
         abstract = True
@@ -44,6 +49,7 @@ class Company(AbstractClient):
         null=False,
         blank=False
     )
+
     class Meta(AbstractClient.Meta):
         abstract = False
         indexes = [
